@@ -5,7 +5,7 @@ export interface AuthZenRequest {
   action: {
     name: string
   }
-  resource?: {
+  resource: {
     ownerID: string
     type?: string
   }

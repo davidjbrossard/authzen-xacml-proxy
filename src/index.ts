@@ -35,10 +35,14 @@ app.post('/access/v1/evaluations', async (req: JWTRequest, res: Response) => {
     try {
       let r : xacmlRequest = new xacmlRequest();
       let subject : Category = new Category();
+      subject.Attribute = [];
       let action : Category = new Category();
       let resource : Category = new Category();
       // 1. Add subject
       r.AccessSubject = [];
+      for (const [key, value] of Object.entries(authzRequest.subject)) {
+        subject.Attribute.push(new Attribute(key,value));
+      }
       r.AccessSubject.push(subject);
       // 2. Add action
       r.Action = [];
