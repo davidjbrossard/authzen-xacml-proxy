@@ -31,29 +31,37 @@ app.post('/access/v1/evaluations', async (req: JWTRequest, res: Response) => {
   const policyPath = pathMappings[authzRequest?.action?.name]
   const ownerID = authzRequest.resource?.ownerID
   let decision = false
-  if (identity && policyPath) {
-    try {
-      let r : xacmlRequest = new xacmlRequest();
-      let subject : Category = new Category();
-      subject.Attribute = [];
-      let action : Category = new Category();
-      let resource : Category = new Category();
-      // 1. Add subject
-      r.AccessSubject = [];
-      for (const [key, value] of Object.entries(authzRequest.subject)) {
-        subject.Attribute.push(new Attribute(key,value));
-      }
-      r.AccessSubject.push(subject);
-      // 2. Add action
-      r.Action = [];
-      r.Action.push(action);
-      // 3. Add resource
-      r.Resource = [];
-      r.Resource.push(resource);
-    } catch (e) {
-      console.error(e)
+  try {
+    let r : xacmlRequest = new xacmlRequest();
+    let subject : Category = new Category();
+    subject.Attribute = [];
+    let action : Category = new Category();
+    action.Attribute = [];
+    let resource : Category = new Category();
+    resource.Attribute = [];
+    // 1. Add subject
+    r.AccessSubject = [];
+    for (const [key, value] of Object.entries(authzRequest.subject)) {
+      subject.Attribute.push(new Attribute(key,value));
     }
+    r.AccessSubject.push(subject);
+    // 2. Add action
+    r.Action = [];
+    for (const [key, value] of Object.entries(authzRequest.action)) {
+      action.Attribute.push(new Attribute(key,value));
+    }
+    r.Action.push(action);
+    // 3. Add resource
+    r.Resource = [];
+    for (const [key, value] of Object.entries(authzRequest.resource)) {
+      resource.Attribute.push(new Attribute(key,value));
+    }
+    r.Resource.push(resource);
+  } catch (e) {
+    console.error(e)
   }
+
+  // Send request to XACML REST/JSON PDP using axios or any other library
 
   const response = JSON.stringify({
     decision,
