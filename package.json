@@ -12,7 +12,7 @@
     "tsc": "tsc --noEmit --incremental",
     "release": "npm version patch && git push --follow-tags"
   },
-  "repository": "https://github.com/davidjbrossard/authzen-proxy",
+  "repository": "https://github.com/davidjbrossard/authzen-xacml-proxy",
   "author": "David Brossard",
   "license": "MIT",
   "private": true,

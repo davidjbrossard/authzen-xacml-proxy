@@ -3,18 +3,19 @@ import { Request as JWTRequest } from 'express-jwt'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import * as dotenvExpand from 'dotenv-expand'
-import { getConfig } from './config'
-import {Request as axio } from '@axiomatics/xacml-node'
 import { AuthZenRequest } from './interface'
+import { Attribute } from "xacml/Attribute";
+import { Category } from "xacml/Category";
+import { Request as xacmlRequest, RequestWrapper } from "xacml/Request"
+import { Response as xacmlResponse } from "xacml/Response";
 dotenvExpand.expand(dotenv.config())
 
 const app: express.Application = express()
 app.use(express.json())
 app.use(cors())
 
-const authzOptions = getConfig()
 
-const PORT = authzOptions.port ?? 8080
+const PORT = 8080
 
 const pathMappings: Record<string, string> = {
   can_read_user: 'todoApp.GET.users.__userID',
@@ -24,20 +25,27 @@ const pathMappings: Record<string, string> = {
   can_delete_todo: 'todoApp.DELETE.todos.__id',
 }
 
-const instanceName = authzOptions.instanceName || 'todo'
-const instanceLabel = authzOptions.instanceLabel || 'todo'
-
 app.post('/access/v1/evaluations', async (req: JWTRequest, res: Response) => {
-  const request: AuthZenRequest = req.body
-  const identity = request.subject?.identity
-  const policyPath = pathMappings[request?.action?.name]
-  const ownerID = request.resource?.ownerID
+  const authzRequest: AuthZenRequest = req.body
+  const identity = authzRequest.subject?.identity
+  const policyPath = pathMappings[authzRequest?.action?.name]
+  const ownerID = authzRequest.resource?.ownerID
   let decision = false
   if (identity && policyPath) {
     try {
-      let r : axio.Request = new axio.Request();
-      let c : axio.Category = new axio.Category();
-      r.add
+      let r : xacmlRequest = new xacmlRequest();
+      let subject : Category = new Category();
+      let action : Category = new Category();
+      let resource : Category = new Category();
+      // 1. Add subject
+      r.AccessSubject = [];
+      r.AccessSubject.push(subject);
+      // 2. Add action
+      r.Action = [];
+      r.Action.push(action);
+      // 3. Add resource
+      r.Resource = [];
+      r.Resource.push(resource);
     } catch (e) {
       console.error(e)
     }
