@@ -16,15 +16,6 @@
   "author": "David Brossard",
   "license": "MIT",
   "private": true,
-  "dependencies": {
-    "@axiomatics/xacml-node": "^1.0.6",
-    "axios": "^1.6.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "dotenv-expand": "^11.0.6",
-    "express": "^4.18.3",
-    "express-jwt": "^8.4.1"
-  },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -33,5 +24,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.19",
+  "dependencies": {
+    "randombytes": "^2.1.0"
+  }
 }
